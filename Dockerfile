@@ -27,17 +27,19 @@ RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then \
 
 # Create a workspace
 RUN mkdir -p /catkin_ws/src
-WORKDIR /catkin_ws
+WORKDIR /catkin_ws/src
 
-# Copy the cloned repositories into the Docker image
-COPY tortoisebot /catkin_ws/src/tortoisebot
-COPY tortoisebot_waypoints /catkin_ws/src/tortoisebot_waypoints
+# Clone the necessary repositories
+RUN git clone https://github.com/MiguelSolisSegura/tortoisebot_waypoints.git \
+    && git clone https://github.com/rigbetellabs/tortoisebot.git
 
 # Install dependencies and build the workspace
+WORKDIR /catkin_ws
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
-                  cd /catkin_ws && \
                   catkin_make"
 
 # Source the setup.bash file and run the entrypoint
 RUN echo "source /catkin_ws/devel/setup.bash" >> /root/.bashrc
+
+# Use the entrypoint to run your commands
 ENTRYPOINT ["/bin/bash", "-c", "source /catkin_ws/devel/setup.bash && (roslaunch tortoisebot_waypoints tortoisebot_playground_headless.launch &) && sleep 5 && rostest tortoisebot_waypoints waypoints_test.test -r"]
