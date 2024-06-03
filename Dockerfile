@@ -42,8 +42,4 @@ RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
 RUN echo "source /catkin_ws/devel/setup.bash" >> /root/.bashrc
 
 # Use the entrypoint to run your commands
-<<<<<<< HEAD
-ENTRYPOINT ["/bin/bash", "-c", "source /catkin_ws/devel/setup.bash && (roslaunch tortoisebot_gazebo tortoisebot_playground.launch &) && sleep 15 && rostest tortoisebot_waypoints waypoints_test.test -r"]
-=======
 ENTRYPOINT ["/bin/bash", "-c", "source /catkin_ws/devel/setup.bash && (roslaunch tortoisebot_gazebo tortoisebot_playground.launch &) && sleep 20 && rostest tortoisebot_waypoints waypoints_test.test -r"]
->>>>>>> 129c7e88908417cd4ef6b06321328d38abe4d011
